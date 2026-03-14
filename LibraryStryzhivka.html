@@ -31,6 +31,29 @@
         }
         .lang-toggle-btn:hover { background: var(--primary); color: var(--white); }
 
+        /* НОВА КНОПКА РЕЄСТРАЦІЇ ЗВЕРХУ */
+        .top-register-wrapper {
+            position: fixed;
+            top: 15px;
+            left: 20px;
+            z-index: 9999;
+        }
+        .top-register-btn {
+            background: var(--accent);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: var(--shadow);
+        }
+        .top-register-btn:hover {
+            background: #d39e00;
+            transform: scale(1.02);
+        }
+
         header {
             height: 45vh;
             background: linear-gradient(rgba(26, 42, 108, 0.8), rgba(26, 42, 108, 0.8)), 
@@ -78,21 +101,23 @@
         }
         .item-card:hover { transform: translateY(-5px); }
 
-        .item-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border: 2px solid var(--primary);
+        .date-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            align-self: flex-start;
         }
 
-        .book-btn {
+        .stryzhivka-btn {
             margin-top: 15px; background: var(--accent); color: var(--primary);
             border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;
             font-weight: bold; font-size: 0.9rem; transition: 0.3s; align-self: flex-start;
         }
-        .book-btn:hover { background: #d39e00; }
+        .stryzhivka-btn:hover { background: #d39e00; }
 
         /* ЛІЧИЛЬНИК */
         .counter-box {
@@ -167,11 +192,21 @@
             width: 45px; height: 45px; border-radius: 5px; display: flex; justify-content: center; align-items: center;
             text-decoration: none; z-index: 1000;
         }
+        
+        /* Клас для приховання елементів */
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
 
     <a href="#" class="back-to-top">↑</a>
+
+    <!-- НОВА КНОПКА РЕЄСТРАЦІЇ ЗВЕРХУ -->
+    <div class="top-register-wrapper" id="top-register-wrapper">
+        <button class="top-register-btn" onclick="scrollToRegister()" id="top-register-btn">Зареєструватись</button>
+    </div>
 
     <div class="translate-wrapper">
         <button class="lang-toggle-btn" onclick="toggleLanguage()" id="langBtn">English 🌐</button>
@@ -181,7 +216,7 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
             <h3 id="modal-title" style="margin-bottom: 15px; color: var(--primary);">Бронювання книги</h3>
-            <form class="registration-form" onsubmit="event.preventDefault(); alert('Бронювання підтверджено!'); closeModal();">
+            <form class="registration-form" onsubmit="event.preventDefault(); processBooking()">
                 <input type="text" id="book-title" placeholder="Назва книги" required>
                 <input type="text" id="user-ticket" placeholder="Номер читацького квитка" required>
                 <button type="submit" class="submit-btn" id="modal-btn">Надіслати запит</button>
@@ -198,7 +233,7 @@
         <a href="#about" class="nav-btn" id="n-about">Про нас</a>
         <a href="#news" class="nav-btn" id="n-news">Що нового?</a>
         <a href="#services" class="nav-btn" id="n-services">Послуги</a>
-        <a href="#register" class="nav-btn" id="n-readers">Читачі</a>
+        <!-- Кнопку "Читачі" видалено -->
         <a href="#contacts" class="nav-btn" id="n-contacts">Контакти</a>
     </nav>
 
@@ -216,13 +251,13 @@
             <div class="grid-container" id="news-container"></div>
         </section>
 
-        <section id="register" class="info-card">
-            <h2 id="t-reg-title">Стати читачем</h2>
+        <section id="register" class="info-card" id="register-section">
+            <h2 id="t-reg-title">Зареєструватись</h2>
             <form class="registration-form" onsubmit="event.preventDefault(); handleRegistration()">
                 <input type="text" id="form-name" placeholder="Прізвище та Ім'я" required>
                 <input type="email" id="form-email" placeholder="Електронна пошта" required>
                 <input type="tel" id="form-phone" placeholder="Номер телефону" required>
-                <button type="submit" class="submit-btn" id="t-reg-btn">Зареєструватися</button>
+                <button type="submit" class="submit-btn" id="t-reg-btn">Зареєструватись</button>
             </form>
         </section>
 
@@ -232,19 +267,15 @@
                 <div class="item-card">
                     <h3 id="s1-title">Абонемент</h3>
                     <p id="s1-text">Видача книжок додому на термін до 30 днів.</p>
-                    <button class="book-btn" onclick="openModal()" id="b-btn-1">Забронювати книгу</button>
+                    <button class="stryzhivka-btn" onclick="checkBeforeBooking()" id="special-btn">Для Стрижівчан</button>
                 </div>
-                <div class="item-card">
-                    <h3 id="s2-title">Читальний зал</h3>
-                    <p id="s2-text">Робота з рідкісними виданнями та пресою.</p>
-                    <button class="book-btn" onclick="openModal()" id="b-btn-2">Забронювати місце</button>
-                </div>
+                <!-- Читальний зал повністю видалено -->
             </div>
         </section>
 
         <section id="contacts" class="info-card">
             <h2 id="t-contacts-title">Контакти</h2>
-            <p><strong>Адреса:</strong> смт Стрижівка, вул. Мікаберідзе, 20</p>
+            <p><strong>Адреса:</strong> смт Стрижівка, вул. Карла Марса, 20</p>
             <!-- Додане посилання на Facebook -->
             <a href="https://www.facebook.com/strijevka/about_contact_and_basic_info" target="_blank" rel="noopener noreferrer" class="social-link" id="fb-link">
                 <span>📘</span> <span id="fb-text">Ми у Facebook</span>
@@ -268,18 +299,17 @@
     </footer>
 
     <script>
-        // Вбудовані зображення (перетворені з наданих файлів у формат data:image)
-        const photo1 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCABkAGQDASIAAhEBAxEB/8QAHAAAAgIDAQEAAAAAAAAAAAAABQYEBwADCAIB/8QAOxAAAgECBQIDBQUGBQUAAAAAAQIDBBEABRIhMQZBE1FhBxQicYEykaGxwRUjQlLR4RYkYnLwM0OCkvH/xAAZAQADAQEBAAAAAAAAAAAAAAACAwQBAAX/xAAhEQACAgIDAQEBAQEAAAAAAAAAAQIRAyESMQQTIkFRMmH/2gAMAwEAAhEDEQA/AHWLqtUSzFSw5v8A0wSrM8ekyWmr0bw3dkkKFbjScUvN1C8VQYxGQAbAk4bp+qEp+jamnZz4jQ+Gm9+dsDFMmnsuLLeoaCp0hZor+V98R5OoaZZmRXRgDyLHb0xUHRua5dT5bQCoqkNRbePfi45uB5DAGu6yp4M0q0MhMaTMEsdrA7W/XDbkDaL7bPqSP79PzOJkGaUc6Bop4mU8WYb4oGP2i0MQ0iF2UD4RcAYsXp3qekr8hWpSQRlVJcE8W5PqMCnN9C2kXJT1EMhAjlRmO4AbfE+4sbcYpLL+uqcNIIahVup0Pq2b+vrgq/tEhpYV15hGsmkXAPJ9P8Abb4bHk++hUoo/9k=";
-        const photo2 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCABkAGQDASIAAhEBAxEB/8QAHAAAAgIDAQEAAAAAAAAAAAAABQYEBwACAwEI/8QANRAAAgECBAMGBQQCAgMAAAAAAQIDBBEABRIhBjFBEyJRYXGBBxQykaGxwdEjQlLh8BYzUv/EABgBAAMBAQAAAAAAAAAAAAAAAAECAwAE/8QAHxEAAgIDAAMBAQAAAAAAAAAAAAECERIhMQNBUWEi/9oADAMBAAIRAxEAPwBiXMJmW6ShfA2sPU4jVWYTiPRI+v1ufxgrSZXLUPp7aGNADqA9MNlBwvRrCrPIHlP1Hp6AYt4oV2R8k1FbENM3l+VZ4a6Rnj5qOYGJr9d1e23MeeK7WJg20hT0K4s7iihraaqlWPLqyOIDSl4yNShrXHlff2xXcbyAbXx0JJMTDJP4WX8Pq6lR+yqWqI3Z11RSE7m24O2LqmpR2KJ2paw8sUF8NqCqquLadk0iOE6nLtYWCm/5GL/liLR3uSbc/TCTdCzi4vZrxp6hC2qcjzvgpJRpR5ZfU4XQSSed7Yq7iTiyqpc+hoKdVdJZFQ9Rzvjf4h8WZpJS0keVq1Ohe8h3B5nFoSjJbRzyi09D7U8SJSa4YkMspG7fz64ApnWa1UoZJzGg3IU2uMJOQ1ebVeaQLUuDFI3eLC42OH6KihQhRcDqRiXkfWrOmH5hR//9k=";
-
+        // Повністю видалено всі фото. Тепер новини містять лише текст.
         const content = {
             uk: {
                 title: "Стрижівська публічна бібліотека",
                 subtitle: "Ваш путівник у світ знань, культури та саморозвитку",
-                n_about: "Про нас", n_news: "Що нового?", n_services: "Послуги", n_readers: "Читачі", n_contacts: "Контакти",
+                n_about: "Про нас", n_news: "Що нового?", n_services: "Послуги", n_contacts: "Контакти",
                 t_about: "Про бібліотеку", t_news: "Що нового?", t_services: "Наші послуги", t_contacts: "Контакти",
-                t_reg: "Стати читачем", t_reg_btn: "Зареєструватися",
+                t_reg: "Зареєструватись", t_reg_btn: "Зареєструватись",
                 book_btn: "Забронювати книгу", book_btn_alt: "Забронювати місце",
+                special_btn: "Для Стрижівчан", 
+                top_register_btn: "Зареєструватись",
                 modal_title: "Бронювання книги", modal_btn: "Надіслати запит",
                 counter_text: "Читачів на сайті:",
                 placeholder_name: "Прізвище та Ім'я", placeholder_email: "Електронна пошта", placeholder_phone: "Номер телефону",
@@ -288,19 +318,24 @@
                 fb_text: "Ми у Facebook",
                 credit_text: "Сайт створив ",
                 developer_name: "Artem Venglovskij",
+                not_registered_alert: "Спочатку зареєструйтесь, щоб бронювати книги!",
+                booking_success: "Бронювання підтверджено!",
+                already_registered: "Ви вже зареєстровані!",
                 news: [
-                    ["08.03.2026", "Нові надходження", "Отримали 50 нових книг українських авторів.", photo1],
-                    ["12.03.2026", "Літературний вечір", "Зустріч з поетами о 16:00.", photo2]
+                    ["08.03.2026", "Нові надходження", "Отримали 50 нових книг українських авторів."],
+                    ["12.03.2026", "Літературний вечір", "Зустріч з поетами о 16:00."]
                 ],
                 footer: "&copy; 2026 Офіційний сайт Стрижівської бібліотеки."
             },
             en: {
                 title: "Stryzhivka Public Library",
                 subtitle: "Your guide to knowledge, culture, and self-development",
-                n_about: "About Us", n_news: "What's New?", n_services: "Services", n_readers: "Readers", n_contacts: "Contacts",
+                n_about: "About Us", n_news: "What's New?", n_services: "Services", n_contacts: "Contacts",
                 t_about: "About Library", t_news: "What's New?", t_services: "Our Services", t_contacts: "Contacts",
-                t_reg: "Become a Reader", t_reg_btn: "Register Now",
+                t_reg: "Register", t_reg_btn: "Register",
                 book_btn: "Reserve a Book", book_btn_alt: "Reserve a Seat",
+                special_btn: "For Stryzhivka Residents",
+                top_register_btn: "Register",
                 modal_title: "Book Reservation", modal_btn: "Send Request",
                 counter_text: "Readers online:",
                 placeholder_name: "Full Name", placeholder_email: "Email", placeholder_phone: "Phone Number",
@@ -309,9 +344,12 @@
                 fb_text: "We are on Facebook",
                 credit_text: "Website created by ",
                 developer_name: "Artem Venglovskij",
+                not_registered_alert: "Please register first to book books!",
+                booking_success: "Booking confirmed!",
+                already_registered: "You are already registered!",
                 news: [
-                    ["08.03.2026", "New Arrivals", "Received 50 new books by Ukrainian authors.", photo1],
-                    ["12.03.2026", "Literary Evening", "Meeting with poets at 4:00 PM.", photo2]
+                    ["08.03.2026", "New Arrivals", "Received 50 new books by Ukrainian authors."],
+                    ["12.03.2026", "Literary Evening", "Meeting with poets at 4:00 PM."]
                 ],
                 footer: "&copy; 2026 Stryzhivka Library Official Site."
             }
@@ -319,21 +357,89 @@
 
         let currentLang = 'uk';
         let currentVisitorCount = 1; // початкове значення лічильника
+        
+        // Отримуємо стан реєстрації з localStorage або встановлюємо false
+        let isRegistered = localStorage.getItem('isRegistered') === 'true';
+
+        // Функція для оновлення localStorage
+        function updateRegistrationState() {
+            localStorage.setItem('isRegistered', isRegistered);
+        }
+
+        // Функція для застосування стану реєстрації до інтерфейсу
+        function applyRegistrationState() {
+            if (isRegistered) {
+                document.getElementById('top-register-wrapper').classList.add('hidden');
+                document.getElementById('register').classList.add('hidden');
+            } else {
+                document.getElementById('top-register-wrapper').classList.remove('hidden');
+                document.getElementById('register').classList.remove('hidden');
+            }
+        }
 
         // Функції модального вікна
-        function openModal() { document.getElementById('bookingModal').style.display = 'block'; }
-        function closeModal() { document.getElementById('bookingModal').style.display = 'none'; }
+        function openModal() { 
+            document.getElementById('bookingModal').style.display = 'block'; 
+        }
+        function closeModal() { 
+            document.getElementById('bookingModal').style.display = 'none'; 
+        }
+
+        // Нова функція для прокрутки до форми реєстрації
+        function scrollToRegister() {
+            if (!isRegistered) {
+                document.getElementById('register').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                alert(content[currentLang].already_registered);
+            }
+        }
+
+        // Функція для перевірки перед бронюванням
+        function checkBeforeBooking() {
+            const lang = content[currentLang];
+            if (!isRegistered) {
+                alert(lang.not_registered_alert);
+                scrollToRegister(); // Прокручуємо до форми реєстрації
+            } else {
+                openModal(); // Відкриваємо модальне вікно бронювання
+            }
+        }
+
+        // Оновлена функція обробки бронювання (викликається з форми)
+        function processBooking() {
+            const lang = content[currentLang];
+            alert(lang.booking_success);
+            closeModal();
+            // Очищаємо форму бронювання
+            document.getElementById('book-title').value = '';
+            document.getElementById('user-ticket').value = '';
+        }
 
         // Функція оновлення лічильника на екрані
         function refreshCounter() {
             document.getElementById('visitor-count').innerText = currentVisitorCount;
         }
 
-        // Функція обробки реєстрації: збільшуємо лічильник на 1
+        // Функція обробки реєстрації: збільшуємо лічильник, встановлюємо isRegistered = true, зберігаємо в localStorage та приховуємо елементи
         function handleRegistration() {
+            if (isRegistered) {
+                alert(content[currentLang].already_registered);
+                return;
+            }
+            
             // Збільшуємо лічильник
             currentVisitorCount += 1;
             refreshCounter();
+            
+            // Позначаємо користувача як зареєстрованого
+            isRegistered = true;
+            updateRegistrationState(); // Зберігаємо в localStorage
+            
+            // Приховуємо кнопку реєстрації зверху
+            document.getElementById('top-register-wrapper').classList.add('hidden');
+            
+            // Приховуємо форму реєстрації
+            document.getElementById('register').classList.add('hidden');
             
             // Очищаємо форму
             document.getElementById('form-name').value = '';
@@ -341,17 +447,16 @@
             document.getElementById('form-phone').value = '';
             
             // Показуємо повідомлення
-            alert('Дякуємо! Ваша заявка прийнята.');
+            alert('Дякуємо! Ви успішно зареєстровані. Тепер ви можете бронювати книги.');
         }
 
         function updateNews(lang) {
             const newsHtml = lang.news.map(item => `
                 <div class="item-card">
-                    <img src="${item[3]}" alt="Фото новини">
                     <span class="date-badge">${item[0]}</span>
                     <h3>${item[1]}</h3>
                     <p>${item[2]}</p>
-                    <button class="book-btn" onclick="openModal()">${lang.book_btn}</button>
+                    <button class="stryzhivka-btn" onclick="checkBeforeBooking()">${lang.special_btn}</button>
                 </div>
             `).join('');
             document.getElementById('news-container').innerHTML = newsHtml;
@@ -366,7 +471,7 @@
             document.getElementById('n-about').innerText = lang.n_about;
             document.getElementById('n-news').innerText = lang.n_news;
             document.getElementById('n-services').innerText = lang.n_services;
-            document.getElementById('n-readers').innerText = lang.n_readers;
+            // Видалено оновлення n-readers, оскільки його більше немає
             document.getElementById('n-contacts').innerText = lang.n_contacts;
             document.getElementById('t-about-title').innerText = lang.t_about;
             document.getElementById('t-news-title').innerText = lang.t_news;
@@ -377,16 +482,18 @@
             document.getElementById('modal-btn').innerText = lang.modal_btn;
             document.getElementById('f-counter-text').innerText = lang.counter_text;
             document.getElementById('langBtn').innerText = lang.btn;
-            document.getElementById('footer-text').innerText = lang.footer;
+            document.getElementById('footer-text').innerHTML = lang.footer;
             document.getElementById('fb-text').innerText = lang.fb_text;
 
             // Оновлюємо підпис розробника (текст + посилання залишається активним)
             document.getElementById('credit-text').innerText = lang.credit_text;
             document.getElementById('developer-name').innerHTML = `${lang.developer_name} <span class="telegram-icon">✈️</span>`;
 
-            // Кнопки бронювання
-            document.getElementById('b-btn-1').innerText = lang.book_btn;
-            document.getElementById('b-btn-2').innerText = lang.book_btn_alt;
+            // Оновлюємо текст спеціальної кнопки для Стрижівчан (в послугах)
+            document.getElementById('special-btn').innerText = lang.special_btn;
+            
+            // Оновлюємо текст верхньої кнопки реєстрації (якщо вона видима)
+            document.getElementById('top-register-btn').innerText = lang.top_register_btn;
 
             // Плейсхолдери
             document.getElementById('form-name').placeholder = lang.placeholder_name;
@@ -398,9 +505,10 @@
             updateNews(lang);
         }
 
-        // Ініціалізація
+        // Ініціалізація: застосовуємо стан реєстрації при завантаженні
+        applyRegistrationState();
         updateNews(content.uk);
         refreshCounter(); // показуємо поточне значення лічильника
-    </script>
-</body>
+    </script> 
+</body>    
 </html>
